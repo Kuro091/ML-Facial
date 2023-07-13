@@ -1,9 +1,9 @@
 export const serviceConfigs = [
-  // {
-  //   name: 'K8s',
-  //   description: 'Kubernetes',
-  //   url: 'https://4b70-210-245-52-237.ngrok-free.app/',
-  // },
+  {
+    name: 'K8s',
+    description: 'Kubernetes',
+    url: 'https://192.168.1.59:31129',
+  },
   {
     name: 'Airflow',
     description: 'Airflow',
@@ -12,11 +12,11 @@ export const serviceConfigs = [
   {
     name: 'Vault',
     description: 'Vault',
-    url: 'http://192.168.1.59:30332/',
+    url: 'http://192.168.1.59:32072/',
   },
-  // {
-  //   name: 'MinIO',
-  //   description: 'MinIO',
-  //   url: 'https://00b6-210-245-52-237.ngrok-free.app',
-  // },
+  {
+    name: 'MinIO',
+    description: 'MinIO',
+    url: 'http://192.168.1.59:30901',
+  },
 ];
