@@ -45,10 +45,10 @@ export default function Tabs({ data }: TabsProps) {
               className='w-full h-full pb-[5rem] px-[2rem] overflow-hidden bg-white'
             >
               {/* Iframes */}
-              <iframe
+              <object
+                type='text/html'
                 className='w-full h-full overflow-hidden text-white'
-                scrolling='no'
-                src={dat.url}
+                data={dat.url}
                 title={dat.name}
               />
             </Tab.Panel>
