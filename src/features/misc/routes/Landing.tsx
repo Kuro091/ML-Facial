@@ -1,10 +1,12 @@
 import MainLayout from '@/components/Layouts/MainLayout';
-import beard from '@/assets/images/fake-beard.png';
+import beardImg from '@/assets/images/fake-beard.png';
+import peepImg from '@/assets/images/people.jpg';
 import * as FaceAPI from 'face-api.js';
 import { useEffect, useRef } from 'react';
 
 const Landing = () => {
   const imgRef = useRef<HTMLImageElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     async function loadModels() {
@@ -18,6 +20,26 @@ const Landing = () => {
           imgRef?.current,
           new FaceAPI.TinyFaceDetectorOptions()
         ).withFaceLandmarks(true);
+
+        if (!detection) {
+          return;
+        }
+
+        const leftEyeLopez = detection.landmarks.getLeftEye();
+        console.log(leftEyeLopez);
+
+        const beardEle = document.createElement('img') as HTMLImageElement;
+        beardEle.src = beardImg;
+        beardEle.style.cssText = `
+          position: absolute;
+          width: 200px;
+          top: calc(${leftEyeLopez[0].y / 2}px + 90px);
+          left: calc(${leftEyeLopez[0].x / 2}px + 20px);
+          transform: rotate(5deg);
+        `;
+        console.log(beardEle);
+
+        containerRef?.current?.appendChild(beardEle);
       }
     }
 
@@ -26,17 +48,11 @@ const Landing = () => {
 
   return (
     <MainLayout>
-      <div className='container relative flex mx-auto h-full justify-center items-center'>
-        <img ref={imgRef} className='absolute' src='http://placekitten.com/300/400' />
-        <div
-          className='absolute w-20 top-[200px] left-[55px] -rotate-3'
-          style={{
-            filter:
-              'invert(100%) sepia(0%) saturate(7482%) hue-rotate(3deg) brightness(95%) contrast(104%)',
-          }}
-        >
-          <img src={beard} />
-        </div>
+      <div
+        ref={containerRef}
+        className='w-80 h-96 container relative flex mx-auto justify-center items-center'
+      >
+        <img ref={imgRef} className='absolute w-full h-full' src={peepImg} />
       </div>
     </MainLayout>
   );
