@@ -14,8 +14,8 @@ const Landing = () => {
   useEffect(() => {
     containerRefs.current?.length &&
       containerRefs.current?.length > 0 &&
-      containerRefs.current?.forEach((ref) => {
-        putBeard({
+      containerRefs.current?.forEach(async (ref) => {
+        await putBeard({
           containerRef: ref as HTMLDivElement,
         });
       });

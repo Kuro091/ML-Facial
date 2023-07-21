@@ -71,8 +71,8 @@ export const putBeard = async ({
       position: absolute;
       left: ${overlayValues.leftOffset * scale}px;
       top: ${overlayValues.topOffset * scale}px;
-      width: ${overlayValues.width * scale * 2}px;
-      transform: rotate(${overlayValues.angle}deg);
+      width: ${overlayValues.width * scale}px;
+      transform: rotate(${overlayValues.angle * scale}deg) scale(-1, 1));
     `;
 
     containerRef?.appendChild(beardEle);
