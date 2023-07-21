@@ -1,8 +1,8 @@
 import * as FaceAPI from 'face-api.js';
-import overlay from '@/assets/images/overlay.png';
+import overlay from '@/assets/images/overlay-frankenstein.png';
 
 const getOverlayValues = (landmarks: FaceAPI.FaceLandmarks68) => {
-  const leftEye = landmarks.getLeftEye();
+  const nose = landmarks.getNose();
   const jawLine = landmarks.getJawOutline();
   
   const jawLeft = jawLine[0];
@@ -12,26 +12,23 @@ const getOverlayValues = (landmarks: FaceAPI.FaceLandmarks68) => {
   const opposite = jawRight.y - jawLeft.y;
 
   const jawLength = Math.sqrt(
-    Math.pow(jawRight.x - jawLeft.x, 2) + Math.pow(jawRight.y - jawLeft.y, 2)
+    Math.pow(adjacent, 2) + Math.pow(opposite, 2)
   )
 
-  const angle = Math.round(Math.tan(opposite / adjacent) * 100)
+  const angle = Math.atan2(opposite, adjacent) * (180 / Math.PI);
+  const width = jawLength * 2.2; // 2.2 is calculated from overlay, outer/inner 
 
   return {
-    width: jawLength,
+    width,
     angle,
-    leftOffset: leftEye[0].x,
-    topOffset: leftEye[0].y,
+    leftOffset: jawLeft.x - width * 0.1785,
+    topOffset: nose[0].y -width * 0.395,
   }
-  
-
 }
 
 export const putBeard = async ({
-  imgRef,
   containerRef,
 }: {
-  imgRef: HTMLImageElement | null;
   containerRef: HTMLDivElement | null;
 }) => {
   await Promise.all([
@@ -39,11 +36,13 @@ export const putBeard = async ({
     FaceAPI.nets.faceLandmark68TinyNet.loadFromUri('/models'),
   ]).catch((err) => console.log(err));
 
-  if (imgRef) {
-    const scale = imgRef.width / imgRef.naturalWidth;
+  const img = containerRef?.querySelector('img');
+
+  if (img) {
+    const scale = img.width / img.naturalWidth;
 
     const detection = await FaceAPI.detectSingleFace(
-      imgRef,
+      img,
       new FaceAPI.TinyFaceDetectorOptions()
     ).withFaceLandmarks(true);
 
@@ -53,17 +52,30 @@ export const putBeard = async ({
 
     const overlayValues = getOverlayValues(detection.landmarks);
 
+    // detection.landmarks.getJawOutline().forEach((pt) => {
+    //   const jawPoint = document.createElement('div');
+    //   jawPoint.style.cssText = `
+    //     position: absolute;
+    //     left: ${pt.x * scale}px;
+    //     top: ${pt.y * scale}px;
+    //     width: 5px;
+    //     height: 5px;
+    //     background: red;
+    //   `;
+    //   containerRef?.appendChild(jawPoint);
+    // });
 
     const beardEle = document.createElement('img') as HTMLImageElement;
     beardEle.src = overlay;
     beardEle.style.cssText = `
       position: absolute;
-      left: ${overlayValues.leftOffset}px;
-      top: ${overlayValues.topOffset}px;
-      width: ${overlayValues.width}px;
+      left: ${overlayValues.leftOffset * scale}px;
+      top: ${overlayValues.topOffset * scale}px;
+      width: ${overlayValues.width * scale * 2}px;
       transform: rotate(${overlayValues.angle}deg);
     `;
 
     containerRef?.appendChild(beardEle);
+
   }
 }

@@ -1,26 +1,40 @@
 import MainLayout from '@/components/Layouts/MainLayout';
-import peepImg from '@/assets/images/people.jpg';
+import peepImg3 from '@/assets/images/people_3.jpg';
+import peepImg2 from '@/assets/images/people_2.jpg';
+import peepImg1 from '@/assets/images/people_1.jpg';
+import peepImg4 from '@/assets/images/people_4.jpg';
 import { useEffect, useRef } from 'react';
 import { putBeard } from '@/utils/putBeard';
 
+const peepImgs = [peepImg1, peepImg2, peepImg3, peepImg4];
+
 const Landing = () => {
-  const imgRef = useRef<HTMLImageElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRefs = useRef<HTMLDivElement[]>([]);
 
   useEffect(() => {
-    putBeard({
-      containerRef: containerRef?.current,
-      imgRef: imgRef?.current,
-    });
+    containerRefs.current?.length &&
+      containerRefs.current?.length > 0 &&
+      containerRefs.current?.forEach((ref) => {
+        putBeard({
+          containerRef: ref as HTMLDivElement,
+        });
+      });
   }, []);
 
   return (
     <MainLayout>
-      <div
-        ref={containerRef}
-        className='w-80 min-h-[20rem] h-80 container relative flex mx-auto justify-center items-center'
-      >
-        <img ref={imgRef} className='absolute w-full h-full' src={peepImg} />
+      <div className='relative mx-auto w-[900px]'>
+        <div className='grid grid-cols-2 grid-rows-2 gap-[20px] mx-[50px] max-w-[90vw]'>
+          {peepImgs.map((img, index) => (
+            <div
+              key={index}
+              ref={(ref) => containerRefs.current?.push(ref as HTMLDivElement)}
+              className='max-w-full relative'
+            >
+              <img className='w-full' src={img} />
+            </div>
+          ))}
+        </div>
       </div>
     </MainLayout>
   );
