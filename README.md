@@ -1,6 +1,13 @@
-# Generic-Template-From-React-Bullet-Proof
+# ReactJS + Vite + Tailwindcss + HeadlessUI Playground
+# This is the project where I play around with css animation or AI/ML stuff
 
-Configured with Vite + ReactJS + Tailwindcss + HeadlessUI
-Minimally adopted folder architecture from react-bullet-proof https://github.com/alan2207/bulletproof-react
+Architecture of react-bullet-proof
 
-This is to potentially save me some time setting up if I have to start a new react project
+in case someone who want for some reasons run this project...
+
+```
+
+routes 
+/ - Home page - where I play around with https://justadudewhohacks.github.io/face-api.js/face_and_landmark_detection/
+
+/test - revealing animation
